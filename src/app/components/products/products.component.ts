@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Product } from 'src/app/models/product';
 import { ProductService } from 'src/app/services/product.service';
 
@@ -11,18 +12,35 @@ export class ProductsComponent implements OnInit {
   products: Product[] = [];
   dataLoaded = false;
 
-
-  constructor(private productService:ProductService) {} // injection yapıldı.
+  constructor(
+    private productService: ProductService,
+    private activatedRoute: ActivatedRoute
+  ) {} // injection yapıldı.
 
   ngOnInit(): void {
-    this.getProducts();
+    this.activatedRoute.params.subscribe(params=>{
+      if (params["categoryId"]) {
+        this.getProductsByCategory(params["categoryId"])
+      }else{
+        this.getProducts()
+      }
+    })
+
   }
 
   getProducts() {
-    this.productService.getProducts() .subscribe((response) => {  //url den gelen sonucu ProductResponseModel e map le ve dönecek sonuca abone ol gelen yanıt response 
-      this.products= response.data   //
+    this.productService.getProducts().subscribe((response) => {
+      //url den gelen sonucu ProductResponseModel e map le ve dönecek sonuca abone ol gelen yanıt response
+      this.products = response.data; //
       this.dataLoaded = true;
-    }) 
-
+    });
+  }
+  getProductsByCategory(categoryId: number) {
+    this.productService
+      .getProductsByCategory(categoryId)
+      .subscribe((response) => {
+        this.products = response.data;
+        this.dataLoaded = true;
+      })
   }
 }

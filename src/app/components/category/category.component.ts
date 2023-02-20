@@ -9,6 +9,7 @@ import { CategoryService } from 'src/app/services/category.service';
 })
 export class CategoryComponent implements OnInit {
   categories: Category[] = [];
+  currentCategory :Category; // "strictPropertyInitialization": false, tsconfig.json
   dataLoaded = false;
 
 
@@ -24,5 +25,24 @@ export class CategoryComponent implements OnInit {
       this.dataLoaded = true;
     }) 
 
+  }
+  setCurrentCategory(category:Category){
+    this.currentCategory=category;
+
+  }
+  getCurrentCAtegoryClass(category:Category){
+    if (category == this.currentCategory) {
+      return "list-group-item active"
+    }else{
+      return"list-group-item"
+    }
+  }
+  getAllCategoryClass(){
+    if (!this.currentCategory) {
+      return "list-group-item active"     
+    }else{
+      return"list-group-item"
+
+    }
   }
 }
