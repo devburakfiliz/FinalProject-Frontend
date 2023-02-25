@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Product } from 'src/app/models/product';
 import { ProductService } from 'src/app/services/product.service';
 
@@ -15,7 +16,8 @@ export class ProductsComponent implements OnInit {
 
   constructor(
     private productService: ProductService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private toastrService:ToastrService
   ) {} // injection yapıldı.
 
   ngOnInit(): void {
@@ -43,5 +45,8 @@ export class ProductsComponent implements OnInit {
         this.products = response.data;
         this.dataLoaded = true;
       })
+  }
+  addToCart(product:Product){
+    this.toastrService.success("Sepete eklendi",product.productName)
   }
 }
