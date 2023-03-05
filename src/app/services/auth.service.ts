@@ -1,6 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LoginModel } from '../models/loginModel';
+import { ResponseModel } from '../models/responseModel';
+import { SingleResponseModel } from '../models/singleResponseModel';
+import { TokenModel } from '../models/tokenModel';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +13,15 @@ export class AuthService {
 
   constructor(private httpClient:HttpClient) { }
 
-  login(loginModel:LoginModel) {
-    return this.httpClient.post(this.apiUrl+"login",loginModel)
+  login(loginModel:LoginModel)  {
+    return this.httpClient.post<SingleResponseModel<TokenModel>>(this.apiUrl+"login",loginModel)
+  }
+
+  isAuthenticated(){
+    if (localStorage.getItem("token")) {  //tarayıcının hatrılaması ıcın tokenı localstorage da tutucaz
+      return true;
+    }else{
+      return false;
+    }
   }
 }
